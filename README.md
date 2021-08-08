@@ -5,6 +5,8 @@ Flexible property bag class
 
 ``` Python
 
+    import propertybag as pb
+
     bag = pb.Bag({'a':'b'}, c='d')
     print(bag)                      # > {"a": "b", "c": "d"}
 
