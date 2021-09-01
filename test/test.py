@@ -155,11 +155,54 @@ def test_3():
         assert i == v
         i += 1
 
+def test_4():
+
+    _p = pb.Bag()
+
+    _p.set(None, {'a': 1, 'b': 2})
+    Log(_p)
+
+    assert _p.a == 1
+    assert _p.b == 2
+
+    _p.merge({'c': 3, 'd': 4})
+    Log(_p)
+
+    assert _p.a == 1
+    assert _p.b == 2
+    assert _p.c == 3
+    assert _p.d == 4
+
+    _p2 = pb.Bag({'e': 5, 'f': 6})
+    _p.merge(_p2)
+    Log(_p)
+
+    assert _p.a == 1
+    assert _p.b == 2
+    assert _p.c == 3
+    assert _p.d == 4
+    assert _p.e == 5
+    assert _p.f == 6
+
+    _p.merge({'a': 7})
+    Log(_p)
+
+    assert _p.a == 7
+    assert _p.b == 2
+
+    _p.merge({'a': 1, 'g': 8}, False)
+    Log(_p)
+
+    assert _p.a == 7
+    assert _p.b == 2
+    assert _p.g == 8
+
 
 def main():
     test_1()
     test_2()
     test_3()
+    test_4()
 
 
 if __name__ == '__main__':

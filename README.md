@@ -74,7 +74,7 @@ Flexible property bag class
     except ValueError as e:
         Log(e)                              # > Value not set
 
-    # If you don't want exceptions thrown
+    # If you don't want exceptions thrown when value doesn't exist, provide a default
     bag_nt = pb.Bag({'a': 'b'}, '')
     Log(bag_nt.d.e.f.g.i)                   # > ''
 

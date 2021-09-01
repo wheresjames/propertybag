@@ -254,6 +254,8 @@ class Bag():
     def get(self, ks, defval=None, sep='.'):
         d = 0
         r = self.pb
+        if not ks:
+            return r
         for k in ks.split(sep):
             if not isinstance(r, dict) and not isinstance(r, Bag):
                 return defval
@@ -278,6 +280,12 @@ class Bag():
         @endcode
     '''
     def set(self, ks, val, sep='.'):
+        if not ks:
+            if isinstance(val, dict):
+                self.__dict__['pb'] = val
+            elif isinstance(val, Bag):
+                self.__dict__['pb'] = val.pb
+            return self.pb
         kn = None
         r = self.pb
         for k in ks.split(sep):
@@ -290,7 +298,17 @@ class Bag():
             kn = k
         if kn:
             r[kn] = val
-        return r[kn]
+            return r[kn]
+        return None
+
+    ''' Merge the values from the specified property bag or array
+    '''
+    def merge(self, pb, overwrite=True):
+        if isinstance(pb, dict):
+            self.__dict__['pb'] = {**self.pb, **pb} if overwrite else {**pb, **self.pb}
+        elif isinstance(pb, Bag):
+            self.__dict__['pb'] = {**self.pb, **pb.pb} if overwrite else {**pb.pb, **self.pb}
+
 
     ''' Returns the dict items
     '''
