@@ -309,6 +309,13 @@ class Bag():
         elif isinstance(pb, Bag):
             self.__dict__['pb'] = {**self.pb, **pb.pb} if overwrite else {**pb.pb, **self.pb}
 
+    ''' Update property bag values
+    '''
+    def update(self, pb):
+        if isinstance(pb, dict):
+            self.__dict__['pb'].update(pb)
+        elif isinstance(pb, Bag):
+            self.__dict__['pb'].update(pb.pb)
 
     ''' Returns the dict items
     '''
