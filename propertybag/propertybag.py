@@ -138,19 +138,21 @@ class Bag():
 
     ''' Constructor
         @param [in] i           - dict to initialize object with
-        @param [in] defval      - Default value to return when non
-                                  existing value is read.
-    '''
-    def __init__(self, i=None, defstr=ValueError, defval=None, /, **kwargs):
+        @param [in] defstr      - Default string value when non exists
+        @param [in] defval      - Default value when non exists
 
-        self.__dict__['defstr'] = defstr
-        self.__dict__['defval'] = defval
+        If default values are not provided, an exception willl be thrown instead.
+    '''
+    def __init__(self, _i=None, _defstr=ValueError, _defval=None, **kwargs):
+
+        self.__dict__['defstr'] = _defstr
+        self.__dict__['defval'] = _defval
 
         self.__dict__['pb'] = dict()
-        if isinstance(i, dict):
-            self.__dict__['pb'] = i
-        elif isinstance(i, Bag):
-            self.__dict__['pb'] = i.__dict__['pb']
+        if isinstance(_i, dict):
+            self.__dict__['pb'] = _i
+        elif isinstance(_i, Bag):
+            self.__dict__['pb'] = _i.__dict__['pb']
 
         if len(kwargs):
             self.__dict__['pb'].update(kwargs)
