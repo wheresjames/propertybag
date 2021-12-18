@@ -74,6 +74,19 @@ def test_1():
     Log(_p2['v'])
     assert _p2['v'] == 'changed_again'
 
+    _p = pb.Bag()
+    _p[42] = 'abc'
+    Log(_p)
+    assert _p[42] == 'abc'
+    assert _p.get(42) == 'abc'
+
+    _p.set(42, 'def')
+    assert _p[42] == 'def'
+
+    _p = pb.Bag(a={})
+    _p.bag('a').b = 42
+    assert _p.a.b == 42
+
 
 def test_2():
 

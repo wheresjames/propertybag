@@ -148,11 +148,12 @@ class Bag():
         self.__dict__['defstr'] = _defstr
         self.__dict__['defval'] = _defval
 
-        self.__dict__['pb'] = dict()
         if isinstance(_i, dict):
             self.__dict__['pb'] = _i
         elif isinstance(_i, Bag):
             self.__dict__['pb'] = _i.__dict__['pb']
+        else:
+            self.__dict__['pb'] = dict()
 
         if len(kwargs):
             self.__dict__['pb'].update(kwargs)
@@ -256,15 +257,18 @@ class Bag():
     def get(self, ks, defval=None, sep='.'):
         d = 0
         r = self.pb
-        if not ks:
-            return r
-        for k in ks.split(sep):
-            if not isinstance(r, dict) and not isinstance(r, Bag):
-                return defval
-            if k not in r:
-                return defval
-            d += 1
-            r = r[k]
+        try:
+            if not isinstance(ks, str):
+                return r[ks] if ks in r else defval
+            if not ks:
+                return r
+            for k in ks.split(sep):
+                if not isinstance(r, dict) and not isinstance(r, Bag):
+                    return defval
+                d += 1
+                r = r[k]
+        except Exception as e:
+            return defval
         return r if 0 < d else defval
 
     ''' Set value using compound key
@@ -290,7 +294,10 @@ class Bag():
             return self.pb
         kn = None
         r = self.pb
-        for k in ks.split(sep):
+        if not isinstance(ks, str):
+            r[ks] = val
+            return r[ks]
+        for k in str(ks).split(sep):
             if kn:
                 if kn not in r:
                     r[kn] = dict()
@@ -302,6 +309,50 @@ class Bag():
             r[kn] = val
             return r[kn]
         return None
+
+    ''' Get propertybag using compound key
+        @param [in] ks      - Compound key
+        @param [in] defval  - Default value
+        @param [in] sep     - Key separator
+
+        Same as get(), but returns a propertybag object instead of dict
+
+        @returns    The propertybag at the specified key or defval
+                    if the key path is not found.
+
+        Example:
+        @begincode
+
+            # Equivalent to v = pb.path.to.value
+            v = pb.pb("path.to.value", "default")
+            v = pb.pb("path/to/value", "default", "/")
+
+        @endcode
+    '''
+    def bag(self, ks, defval=None, sep='.'):
+        d = 0
+        r = self.pb
+        try:
+            if not isinstance(ks, str):
+                if ks not in r:
+                    return defval
+                d += 1
+                r = r[ks]
+            elif not ks:
+                return r
+            else:
+                for k in ks.split(sep):
+                    if not isinstance(r, dict) and not isinstance(r, Bag):
+                        return defval
+                    d += 1
+                    r = r[k]
+        except Exception as e:
+            return defval
+        if 0 >= d:
+            return defval
+        if isinstance(r, dict):
+            return Bag(r)
+        return r
 
     ''' Merge the values from the specified property bag or array
     '''
