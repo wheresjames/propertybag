@@ -87,6 +87,12 @@ def test_1():
     _p.bag('a').b = 42
     assert _p.a.b == 42
 
+    assert _p.exists('a') == True
+    assert _p.exists('a.b') == True
+    assert _p.exists('a.b.c') == False
+    _p.delete('a.b')
+    assert _p.exists('a.b') == False
+
 
 def test_2():
 

@@ -1,10 +1,16 @@
 
-# v0.1.5 - 2021-12-17
+# v0.1.7 - 2021-12-17
 
-[!] get() function correctly handles numeric keys
+[+] Added exists()
+[+] Added delete()
 
 
 # v0.1.6 - 2021-12-17
 
 [+] Added bag() function
+
+
+# v0.1.5 - 2021-12-17
+
+[!] get() function correctly handles numeric keys
 

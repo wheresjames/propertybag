@@ -271,6 +271,79 @@ class Bag():
             return defval
         return r if 0 < d else defval
 
+    ''' Return True if key exists, else False
+        @param [in] ks      - Compound key
+        @param [in] sep     - Key separator
+
+        @returns    True if key exists, else False.
+
+        Example:
+        @begincode
+
+            pb.exists("path.to.value") == True
+
+            pb.exists("path/to/value", "/") == False
+
+        @endcode
+    '''
+    def exists(self, ks, sep='.'):
+        d = 0
+        r = self.pb
+        try:
+            if not isinstance(ks, str):
+                return r[ks] if ks in r else defval
+            if not ks:
+                return r
+            for k in ks.split(sep):
+                if not isinstance(r, dict) and not isinstance(r, Bag):
+                    return False
+                d += 1
+                r = r[k]
+        except Exception as e:
+            return False
+        if 0 >= d:
+            return False
+        return True
+
+    ''' Deletes the specified key
+        @param [in] ks      - Compound key
+        @param [in] sep     - Key separator
+
+        @returns    True if key was deleted, else False.
+
+        Example:
+        @begincode
+
+            pb.delete("path.to.value")
+            pb.delete("path/to/value", "/")
+
+        @endcode
+    '''
+    def delete(self, ks, sep='.'):
+        d = 0
+        a = self.pb
+        r = None
+        try:
+            if not isinstance(ks, str):
+                if ks in a:
+                    del a[ks]
+                    return True
+            if not ks:
+                return False
+            for k in ks.split(sep):
+                if not isinstance(a, dict) and not isinstance(a, Bag):
+                    return False
+                d += 1
+                if r:
+                    a = a[r]
+                r = k
+        except Exception as e:
+            return False
+        if 0 >= d:
+            return False
+        del a[r]
+        return True
+
     ''' Set value using compound key
         @param [in] ks      - Compound key
         @param [in] val     - New value to set
