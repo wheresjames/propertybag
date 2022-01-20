@@ -14,7 +14,7 @@ Flexible property bag class
     print(bag.b.c.d.e)              # > 42
     print(bag.toJson())             # > {"a": "b", "c": "d", "b": {"c": {"d": {"e": 42}}}}
 
-    # Returns a dict
+    # Returns a bag object
     bag.b.c['d']
 
     # Returns a Bag() object

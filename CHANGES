@@ -1,4 +1,11 @@
 
+# v0.1.8 - 2022-01-19
+
+[+] Added global variable __info__
+[+] . and [] both return Bag() objects
+[+] Bag() constructor accepts a json string
+
+
 # v0.1.7 - 2021-12-17
 
 [+] Added exists()

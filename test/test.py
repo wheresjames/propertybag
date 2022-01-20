@@ -25,6 +25,7 @@ def test_1():
     Log(r)
     assert r == '{"a": "b", "c": "d"}'
     assert _p.as_dict() == {"a": "b", "c": "d"}
+    assert pb.Bag(r) == {"a": "b", "c": "d"}
 
     r = len(_p)
     Log(r)
@@ -162,6 +163,12 @@ def test_2():
 
     if not _p.a:
         raise Exception('Bool failed')
+
+    assert _p.a.b.exists('c')
+    assert _p.a['b'].exists('c')
+
+    _p = pb.Bag()
+    assert not _p.a['b'].c
 
 
 def test_3():

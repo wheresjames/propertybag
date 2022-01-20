@@ -39,6 +39,13 @@ class PlaceHolder():
         self.__dict__['k'].append(k)
         return self
 
+    ''' Get item operator
+        @param [in] k   - item name
+    '''
+    def __getitem__(self, k):
+        self.__dict__['k'].append(k)
+        return self
+
     ''' Set attribute operator
         @param [in] k   - Attribute name
         @param [in] v   - Attribute value to set
@@ -152,6 +159,8 @@ class Bag():
             self.__dict__['pb'] = _i
         elif isinstance(_i, Bag):
             self.__dict__['pb'] = _i.__dict__['pb']
+        elif isinstance(_i, str):
+            self.__dict__['pb'] = json.loads(_i)
         else:
             self.__dict__['pb'] = dict()
 
@@ -162,7 +171,12 @@ class Bag():
         @param [in] k   - Key to return
     '''
     def __getitem__(self, k):
+        if k not in self.pb:
+            return PlaceHolder(self.pb, k, self.__dict__['defstr'], self.__dict__['defval'])
+        if isinstance(self.pb[k], dict):
+            return Bag(self.pb[k])
         return self.pb[k]
+        # return self.pb[k]
 
     ''' Assignment operator
         @param [in] k   - Key to set
