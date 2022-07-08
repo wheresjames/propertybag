@@ -1,4 +1,12 @@
 
+# v0.1.9 - 2022-07-07
+
+[+] __contains__ operator
+[+] __ne__ operator
+[!] += and -= operators work correctly
+[+] Find by type operator
+[+] Allow initialization with multiple dict objects
+
 # v0.1.8 - 2022-01-19
 
 [+] Added global variable __info__

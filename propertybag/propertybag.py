@@ -141,7 +141,7 @@ class PlaceHolder():
 
     @endcode
 '''
-class Bag():
+class Bag(dict):
 
     ''' Constructor
         @param [in] i           - dict to initialize object with
@@ -150,10 +150,35 @@ class Bag():
 
         If default values are not provided, an exception willl be thrown instead.
     '''
+    # def __init__(self, *args, _defstr=ValueError, _defval=None, **kwargs):
     def __init__(self, _i=None, _defstr=ValueError, _defval=None, **kwargs):
+
+        dict.__init__(self, _='_')
 
         self.__dict__['defstr'] = _defstr
         self.__dict__['defval'] = _defval
+        self.__dict__['pb'] = dict()
+
+        # i = 0
+        # while True:
+        #     a = self.findByType(i, [dict, Bag, str], None, args)
+        #     if not a:
+        #         break
+        #     _a = None
+        #     if isinstance(a, dict):
+        #         _a = a
+        #     elif isinstance(a, Bag):
+        #         _a = a
+        #     elif isinstance(a, str):
+        #         _a = json.loads(a)
+        #     else:
+        #         continue
+        #     if not i:
+        #         self.__dict__['pb'] = _a
+        #     else:
+        #         self.__dict__['pb'].update(_a)
+        #     i += 1
+
 
         if isinstance(_i, dict):
             self.__dict__['pb'] = _i
@@ -166,6 +191,27 @@ class Bag():
 
         if len(kwargs):
             self.__dict__['pb'].update(kwargs)
+
+    ''' Find argument by type or return default
+        @param [in] i       - Index of argument
+        @param [in] t       - Type to find or list of types to find
+        @param [in] d       - Default value to return if not found
+        @param [in] args    - Argument lists to search
+    '''
+    @staticmethod
+    def findByType(i, t, d, args):
+        for v in args:
+            match = False
+            if type(t) == list:
+                if (callable in t and callable(v)) or type(v) in t:
+                    match = True
+            elif (callable == t and callable(v)) or type(v) == t:
+                match = True
+            if match:
+                if not i:
+                    return v
+                i -= 1
+        return d
 
     ''' Index operator
         @param [in] k   - Key to return
@@ -214,6 +260,11 @@ class Bag():
     def __delattr__(self, k):
         del self.pb[k]
 
+    ''' Contains operator
+        @param [in] k   - Key to check
+    '''
+    def __contains__(self, k):
+        return k in self.__dict__['pb']
 
     ''' Length operator
     '''
@@ -240,10 +291,19 @@ class Bag():
     ''' Equality operator
     '''
     def __eq__(self, other):
-        if isinstance(other, dict):
-            return self.pb == other
-        elif isinstance(other, Bag):
+        if isinstance(other, Bag):
             return self.pb == other.pb
+        elif isinstance(other, dict):
+            return self.pb == other
+        return NotImplemented
+
+    ''' Equality operator
+    '''
+    def __ne__(self, other):
+        if isinstance(other, Bag):
+            return self.pb != other.pb
+        elif isinstance(other, dict):
+            return self.pb != other
         return NotImplemented
 
     ''' Return object as dict
@@ -451,11 +511,20 @@ class Bag():
 
     ''' Update property bag values
     '''
-    def update(self, pb):
-        if isinstance(pb, dict):
-            self.__dict__['pb'].update(pb)
-        elif isinstance(pb, Bag):
-            self.__dict__['pb'].update(pb.pb)
+    def update(self, *args, **kwargs):
+        i = 0
+        while True:
+            a = self.findByType(i, [dict, Bag], None, args)
+            i += 1
+            if not a:
+                break
+            if isinstance(a, dict):
+                self.__dict__['pb'].update(a)
+            elif isinstance(pb, Bag):
+                self.__dict__['pb'].update(a.pb)
+        if len(kwargs):
+            self.__dict__['pb'].update(kwargs)
+
 
     ''' Returns the dict items
     '''

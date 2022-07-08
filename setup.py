@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 
+# pip install . && ./test/test.py
+# ./clean.sh && ./setup.py bdist_wheel
+# python3 -m twine upload -r testpypi dist/*
+# python3 -m twine upload dist/*
+
 import os
 from setuptools import setup
 

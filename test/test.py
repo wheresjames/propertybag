@@ -84,8 +84,10 @@ def test_1():
     _p.set(42, 'def')
     assert _p[42] == 'def'
 
-    _p = pb.Bag(a={})
+    _p = pb.Bag(a={'x':1})
+    Log(_p)
     _p.bag('a').b = 42
+    Log(_p)
     assert _p.a.b == 42
 
     assert _p.exists('a') == True
@@ -93,6 +95,22 @@ def test_1():
     assert _p.exists('a.b.c') == False
     _p.delete('a.b')
     assert _p.exists('a.b') == False
+
+    _p.get = 'val'
+    assert _p.get('get') == 'val'
+
+    # _p = pb.Bag({'a':'b'}, {'c':'d'}, e='f')
+    # Log(_p)
+    # assert _p.a == 'b'
+    # assert _p.c == 'd'
+    # assert _p.e == 'f'
+
+    _p = pb.Bag()
+    _p.update({'a':'b'}, {'c':'d'}, e='f')
+    Log(_p)
+    assert _p.a == 'b'
+    assert _p.c == 'd'
+    assert _p.e == 'f'
 
 
 def test_2():
@@ -155,7 +173,7 @@ def test_2():
     if _p.a < 0:
         raise Exception('< failed')
 
-    _p = pb.Bag({}, 99, 99)
+    _p = pb.Bag({}, _defstr=99, _defval=99)
     assert _p.a.b.c == 99
 
     _p.a.b.c = 100
@@ -223,13 +241,26 @@ def test_4():
     assert _p.b == 2
     assert _p.g == 8
 
+    _p.g += _p.b
+    assert _p.g == 10
+    _p.g -= _p.b
+    assert _p.g == 8
+
+    _p.z = {'a': 'b'}
+
+    Log(_p)
+
+def test_5():
+    import json
+    _p = pb.Bag(a='b', c='d', e=pb.Bag(a='b'))
+    Log(json.dumps(_p))
 
 def main():
     test_1()
     test_2()
     test_3()
     test_4()
-
+    test_5()
 
 if __name__ == '__main__':
     try:
